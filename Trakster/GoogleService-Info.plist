@@ -2,18 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>501900012349-sltrbnm0hhq86i856dmblhs4dv2hsim8.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.501900012349-sltrbnm0hhq86i856dmblhs4dv2hsim8</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAnWfeiZeurtRyuhSGRojcGe-5fVMbnPz8</string>
+	<string>AIzaSyBgrtnpHNFFMX2YDxKNm3kTbbr5vhJqMpg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>78329065473</string>
+	<string>501900012349</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.umutYuksel.Trakster</string>
 	<key>PROJECT_ID</key>
-	<string>trakster-75f8e</string>
+	<string>trakster-d1ecc</string>
 	<key>STORAGE_BUCKET</key>
-	<string>trakster-75f8e.appspot.com</string>
+	<string>trakster-d1ecc.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:78329065473:ios:135d5ee501e70cf8449000</string>
+	<string>1:501900012349:ios:feeecb64e32bea64757354</string>
 </dict>
 </plist>
