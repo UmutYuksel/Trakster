@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		093166982C8607DE00DADC5F /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093166972C8607DE00DADC5F /* AuthenticationService.swift */; };
+		0931669B2C8608A000DADC5F /* AppleAuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0931669A2C8608A000DADC5F /* AppleAuthenticationService.swift */; };
+		0931669E2C8608F200DADC5F /* GoogleAuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0931669D2C8608F200DADC5F /* GoogleAuthenticationService.swift */; };
+		093166A12C86093A00DADC5F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093166A02C86093A00DADC5F /* User.swift */; };
 		92245C392C52BADF00AD2FE4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92245C382C52BADF00AD2FE4 /* AppDelegate.swift */; };
 		92245C3B2C52BADF00AD2FE4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92245C3A2C52BADF00AD2FE4 /* SceneDelegate.swift */; };
 		92245C3D2C52BADF00AD2FE4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92245C3C2C52BADF00AD2FE4 /* LoginViewController.swift */; };
@@ -53,6 +57,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		093166952C85F69600DADC5F /* Trakster.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Trakster.entitlements; sourceTree = "<group>"; };
+		093166972C8607DE00DADC5F /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
+		0931669A2C8608A000DADC5F /* AppleAuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthenticationService.swift; sourceTree = "<group>"; };
+		0931669D2C8608F200DADC5F /* GoogleAuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthenticationService.swift; sourceTree = "<group>"; };
+		093166A02C86093A00DADC5F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		92245C352C52BADF00AD2FE4 /* Trakster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trakster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92245C382C52BADF00AD2FE4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92245C3A2C52BADF00AD2FE4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +120,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		093166962C8607C500DADC5F /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				0931669C2C8608EA00DADC5F /* GoogleAuthenticationService */,
+				093166992C86087000DADC5F /* AppleAuthenticationService */,
+				093166972C8607DE00DADC5F /* AuthenticationService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		093166992C86087000DADC5F /* AppleAuthenticationService */ = {
+			isa = PBXGroup;
+			children = (
+				0931669A2C8608A000DADC5F /* AppleAuthenticationService.swift */,
+			);
+			path = AppleAuthenticationService;
+			sourceTree = "<group>";
+		};
+		0931669C2C8608EA00DADC5F /* GoogleAuthenticationService */ = {
+			isa = PBXGroup;
+			children = (
+				0931669D2C8608F200DADC5F /* GoogleAuthenticationService.swift */,
+			);
+			path = GoogleAuthenticationService;
+			sourceTree = "<group>";
+		};
+		0931669F2C86093000DADC5F /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				093166A02C86093A00DADC5F /* User.swift */,
+			);
+			path = Class;
+			sourceTree = "<group>";
+		};
 		92245C2C2C52BADF00AD2FE4 = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +173,8 @@
 		92245C372C52BADF00AD2FE4 /* Trakster */ = {
 			isa = PBXGroup;
 			children = (
+				0931669F2C86093000DADC5F /* Class */,
+				093166962C8607C500DADC5F /* Service */,
 				92245C8F2C52F11200AD2FE4 /* Extension */,
 				92245C872C52C27B00AD2FE4 /* Scene */,
 				92245C382C52BADF00AD2FE4 /* AppDelegate.swift */,
@@ -139,6 +184,7 @@
 				92245C432C52BADF00AD2FE4 /* LaunchScreen.storyboard */,
 				92245C462C52BADF00AD2FE4 /* Info.plist */,
 				928CF8CE2C54049300DC26A1 /* GoogleService-Info.plist */,
+				093166952C85F69600DADC5F /* Trakster.entitlements */,
 			);
 			path = Trakster;
 			sourceTree = "<group>";
@@ -315,9 +361,13 @@
 			files = (
 				92245C8B2C52ED2700AD2FE4 /* SignInViewController.swift in Sources */,
 				928CF8BC2C53C98900DC26A1 /* SignUpViewController.swift in Sources */,
+				0931669B2C8608A000DADC5F /* AppleAuthenticationService.swift in Sources */,
 				928CF8BF2C53E28000DC26A1 /* SignUpViewModel.swift in Sources */,
+				093166982C8607DE00DADC5F /* AuthenticationService.swift in Sources */,
 				92245C3D2C52BADF00AD2FE4 /* LoginViewController.swift in Sources */,
 				92245C392C52BADF00AD2FE4 /* AppDelegate.swift in Sources */,
+				0931669E2C8608F200DADC5F /* GoogleAuthenticationService.swift in Sources */,
+				093166A12C86093A00DADC5F /* User.swift in Sources */,
 				92245C912C52F12400AD2FE4 /* AppColors.swift in Sources */,
 				92245C3B2C52BADF00AD2FE4 /* SceneDelegate.swift in Sources */,
 				92245C8E2C52F09D00AD2FE4 /* SignInViewModel.swift in Sources */,
@@ -470,6 +520,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Trakster/Trakster.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2C2JQAY773;
@@ -498,6 +549,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Trakster/Trakster.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2C2JQAY773;

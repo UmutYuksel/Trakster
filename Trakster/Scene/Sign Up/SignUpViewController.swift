@@ -9,8 +9,10 @@ import UIKit
 import Combine
 import Firebase
 import GoogleSignIn
+import AuthenticationServices
 
 class SignUpViewController: UIViewController {
+    
 
     @IBOutlet weak var signInButton: UIButton!
     @IBOutlet weak var appleSignInButton: UIButton!
@@ -21,14 +23,39 @@ class SignUpViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var usernameTextField: UITextField!
     
-    var viewModel = SignUpViewModel()
-    private var cancellables = Set<AnyCancellable>()
+    var viewModel: SignUpViewModel!
 
+        private var cancellables = Set<AnyCancellable>()
+        
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            
+            // Başlatıcı bağımlılıkları buradan geçiyoruz
+            let appleAuthService = AppleAuthenticationService() // Bu sınıfı uygun şekilde oluşturun
+            let googleAuthService = GoogleAuthenticationService() // Bu sınıfı uygun şekilde oluşturun
+            viewModel = SignUpViewModel(appleAuthService: appleAuthService, googleAuthService: googleAuthService)
+            
+            prepareSheetVC()
+            prepareButtonBorders()
+            secureTextButtonAddTarget()
+            bindViewModel()
+            
+            viewModel.onSignUpSuccess = { [weak self] in
+                DispatchQueue.main.async {
+                    self?.performSegue(withIdentifier: "signUpToHome", sender: nil)
+                }
+            }
+            
+            viewModel.onSignUpFailure = { error in
+                DispatchQueue.main.async {
+                    // Handle error (e.g., show an alert)
+                }
+            }
+        }
     fileprivate func bindViewModel() {
-        // Bind ViewModel's isSecure property to the text field
         viewModel.$isSecure
             .sink { [weak self] isSecure in
-                DispatchQueue.main.async { // Perform UI updates on the main thread
+                DispatchQueue.main.async {
                     self?.passwordTextField.isSecureTextEntry = isSecure
                     self?.updateButtonImage()
                 }
@@ -37,15 +64,12 @@ class SignUpViewController: UIViewController {
     }
     
     fileprivate func prepareTextFields() {
-        // Setup text field delegates
         usernameTextField.delegate = self
         passwordTextField.delegate = self
         emailTextField.delegate = self
                 
-        // Set the initial state of the button
         updateSignUpButtonState()
                 
-        // Add target actions to text fields for text changes
         usernameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         passwordTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         emailTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -60,9 +84,8 @@ class SignUpViewController: UIViewController {
         let isPasswordEmpty = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true
         let isEmailEmpty = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true
             
-        // Enable the button only if all text fields have non-empty values
         signUpButton.isEnabled = !isUsernameEmpty && !isPasswordEmpty && !isEmailEmpty
-        }
+    }
     
     fileprivate func prepareButtonBorders() {
         appleSignInButton.seperatorColorBorder()
@@ -71,11 +94,11 @@ class SignUpViewController: UIViewController {
     }
     
     @objc private func buttonTouchDown(_ sender: UIButton) {
-        viewModel.handleButtonTouchDown() // Notify ViewModel that the button was pressed down
+        viewModel.handleButtonTouchDown()
     }
     
     @objc private func buttonTouchUp(_ sender: UIButton) {
-        viewModel.handleButtonTouchUp() // Notify ViewModel that the button was released
+        viewModel.handleButtonTouchUp()
     }
     
     private func updateButtonImage() {
@@ -84,7 +107,6 @@ class SignUpViewController: UIViewController {
     }
     
     fileprivate func secureTextButtonAddTarget() {
-        // Bind button touch events
         secureTextButton.addTarget(self, action: #selector(buttonTouchDown(_:)), for: .touchDown)
         secureTextButton.addTarget(self, action: #selector(buttonTouchUp(_:)), for: .touchUpInside)
         secureTextButton.addTarget(self, action: #selector(buttonTouchUp(_:)), for: .touchUpOutside)
@@ -98,56 +120,33 @@ class SignUpViewController: UIViewController {
     
     @IBAction func googleSignInPressed(_ sender: Any) {
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-
+        
         // Create Google Sign In configuration object.
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
-
+        
         // Start the sign in flow!
         GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in guard let _ = result, error == nil else { return }
-
-          guard let user = result?.user, let idToken = user.idToken?.tokenString else { return }
+            
+            guard let user = result?.user, let idToken = user.idToken?.tokenString else { return }
             
             viewModel.signInWithGoogle(idToken: idToken, accessToken: user.accessToken.tokenString)
         }
     }
+
     
+    @IBAction func appleSignInPressed(_ sender: Any) {
+        viewModel.signInWithApple()
+    }
     
-    @IBAction func singUpButtonPressed(_ sender: Any) {
+    @IBAction func signUpButtonPressed(_ sender: Any) {
         guard let username = usernameTextField.text,
               let password = passwordTextField.text,
               let email = emailTextField.text else { return }
     
         viewModel.signUpWithEmail(username: username, password: password, email: email, view: self.view)
     }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        prepareSheetVC()
-        prepareButtonBorders()
-        secureTextButtonAddTarget()
-        bindViewModel()
-        
-        viewModel.onSignUpSuccess = { [weak self] in
-            DispatchQueue.main.async {
-            self?.performSegue(withIdentifier: "signUpToHome", sender: nil)
-            }
-        }
-                
-        viewModel.onSignUpFailure = { error in
-            DispatchQueue.main.async {
-            // Handle error (e.g., show an alert)
-            }
-        }
-    }
-   
-}
 
-extension SignUpViewController : UISheetPresentationControllerDelegate {
-
-    override var sheetPresentationController: UISheetPresentationController? {
-        presentationController as? UISheetPresentationController
-    }
-        
     private func prepareSheetVC() {
         sheetPresentationController?.delegate = self
         sheetPresentationController?.selectedDetentIdentifier = .medium
@@ -158,10 +157,40 @@ extension SignUpViewController : UISheetPresentationControllerDelegate {
     }
 }
 
+extension SignUpViewController : UISheetPresentationControllerDelegate {
+    override var sheetPresentationController: UISheetPresentationController? {
+        presentationController as? UISheetPresentationController
+    }
+}
+
 extension SignUpViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        // Update the button state whenever the text field value changes
         updateSignUpButtonState()
         return true
+    }
+}
+
+extension SignUpViewController: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            guard let appleIDToken = appleIDCredential.identityToken else {
+                print("Unable to fetch identity token")
+                return
+            }
+            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                return
+            }
+            
+            viewModel.signInWithApple()
+        }
+    }
+
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        print("Sign in with Apple failed: \(error.localizedDescription)")
     }
 }

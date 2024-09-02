@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -112,7 +112,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Üye Ol"/>
                                 <connections>
-                                    <action selector="singUpButtonPressed:" destination="IPk-3w-wJQ" eventType="touchUpInside" id="ajV-ya-4Ko"/>
+                                    <action selector="signUpButtonPressed:" destination="IPk-3w-wJQ" eventType="touchUpInside" id="h8z-qT-ZNt"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="E-posta*" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LNg-bt-5ej">
@@ -156,7 +156,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="googleIcon" title="Google İle Giriş Yap"/>
                                 <connections>
-                                    <action selector="googleSignInPressed:" destination="IPk-3w-wJQ" eventType="touchUpInside" id="K94-Nq-RM4"/>
+                                    <action selector="googleSignInPressed:" destination="IPk-3w-wJQ" eventType="touchUpInside" id="nia-jW-oDI"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4v1-tR-enV">
@@ -167,6 +167,9 @@
                                 <color key="tintColor" name="greyLabelColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="apple.logo" catalog="system" title=" Apple İle Giriş Yap"/>
+                                <connections>
+                                    <action selector="appleSignInPressed:" destination="IPk-3w-wJQ" eventType="touchUpInside" id="IEw-Uw-1sU"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vuj-V2-qDZ">
                                 <rect key="frame" x="25" y="508.33333333333326" width="343" height="30"/>
@@ -176,7 +179,7 @@
                                     <fontDescription key="titleFontDescription" type="system" pointSize="13"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="signInButtonPressed:" destination="IPk-3w-wJQ" eventType="touchUpInside" id="k1l-IU-lc4"/>
+                                    <action selector="signInButtonPressed:" destination="IPk-3w-wJQ" eventType="touchUpInside" id="mBe-K2-bTR"/>
                                     <action selector="signUpButtonPressed:" destination="KB2-S3-vl9" eventType="touchUpInside" id="z5E-Cw-J7r"/>
                                 </connections>
                             </button>
@@ -442,6 +445,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="MZx-mP-fZz" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="F6q-5z-E3N">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" name="borderColor"/>
@@ -460,7 +464,7 @@
         <segue reference="grA-ol-SuG"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="apple.logo" catalog="system" width="32" height="32"/>
+        <image name="apple.logo" catalog="system" width="105" height="128"/>
         <image name="benchmark-4.png" width="568" height="291"/>
         <image name="eye.slash.fill" catalog="system" width="128" height="96"/>
         <image name="googleIcon" width="29" height="29"/>
