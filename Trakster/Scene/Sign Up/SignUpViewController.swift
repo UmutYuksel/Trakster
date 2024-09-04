@@ -25,33 +25,34 @@ class SignUpViewController: UIViewController {
     
     var viewModel: SignUpViewModel!
 
-        private var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        override func viewDidLoad() {
-            super.viewDidLoad()
+        // Başlatıcı bağımlılıkları buradan geçiyoruz
+        let appleAuthService = AppleAuthenticationService() // Bu sınıfı uygun şekilde oluşturun
+        let googleAuthService = GoogleAuthenticationService() // Bu sınıfı uygun şekilde oluşturun
+        viewModel = SignUpViewModel(appleAuthService: appleAuthService, googleAuthService: googleAuthService)
             
-            // Başlatıcı bağımlılıkları buradan geçiyoruz
-            let appleAuthService = AppleAuthenticationService() // Bu sınıfı uygun şekilde oluşturun
-            let googleAuthService = GoogleAuthenticationService() // Bu sınıfı uygun şekilde oluşturun
-            viewModel = SignUpViewModel(appleAuthService: appleAuthService, googleAuthService: googleAuthService)
+        prepareSheetVC()
+        prepareButtonBorders()
+        secureTextButtonAddTarget()
+        bindViewModel()
             
-            prepareSheetVC()
-            prepareButtonBorders()
-            secureTextButtonAddTarget()
-            bindViewModel()
-            
-            viewModel.onSignUpSuccess = { [weak self] in
-                DispatchQueue.main.async {
-                    self?.performSegue(withIdentifier: "signUpToHome", sender: nil)
-                }
-            }
-            
-            viewModel.onSignUpFailure = { error in
-                DispatchQueue.main.async {
-                    // Handle error (e.g., show an alert)
-                }
+        viewModel.onSignUpSuccess = { [weak self] in
+            DispatchQueue.main.async {
+                self?.performSegue(withIdentifier: "signUpToHome", sender: nil)
             }
         }
+        
+        viewModel.onSignUpFailure = { error in
+            DispatchQueue.main.async {
+                print("Sign up failed: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     fileprivate func bindViewModel() {
         viewModel.$isSecure
             .sink { [weak self] isSecure in
@@ -119,19 +120,14 @@ class SignUpViewController: UIViewController {
     }
     
     @IBAction func googleSignInPressed(_ sender: Any) {
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-        
-        // Create Google Sign In configuration object.
-        let config = GIDConfiguration(clientID: clientID)
-        GIDSignIn.sharedInstance.configuration = config
-        
-        // Start the sign in flow!
-        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in guard let _ = result, error == nil else { return }
-            
-            guard let user = result?.user, let idToken = user.idToken?.tokenString else { return }
-            
-            viewModel.signInWithGoogle(idToken: idToken, accessToken: user.accessToken.tokenString)
-        }
+        viewModel.signInWithGoogle(presentingViewController: self) { result in
+                switch result {
+                case .success(let message):
+                    print(message) // "Sign-in successful."
+                case .failure(let error):
+                    print("Sign-in failed: \(error.localizedDescription)")
+                }
+            }
     }
 
     
@@ -167,30 +163,5 @@ extension SignUpViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         updateSignUpButtonState()
         return true
-    }
-}
-
-extension SignUpViewController: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return self.view.window!
-    }
-
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            guard let appleIDToken = appleIDCredential.identityToken else {
-                print("Unable to fetch identity token")
-                return
-            }
-            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
-                return
-            }
-            
-            viewModel.signInWithApple()
-        }
-    }
-
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        print("Sign in with Apple failed: \(error.localizedDescription)")
     }
 }
